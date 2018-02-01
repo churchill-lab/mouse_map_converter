@@ -1,0 +1,69 @@
+###############################################################################
+#
+# DISPLAY CONFIGURATION (Overrides)
+#
+###############################################################################
+
+MAIN_TITLE = 'Mouse Map Converter'
+
+
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+
+MMC_CONFIG = '/app/mmc/resources/mmc-conf.json'
+
+
+LOG_LEVEL = 'DEBUG' # CRITICAL / ERROR / WARNING / INFO / DEBUG
+
+CONVERSION_UNITS = [
+    {
+        'unit': 'averageShifmanMap',
+        'label' : 'Sex-Averaged cM - Cox',
+        'baseUnit': 'cm',
+        'hint' : '3\t48.71\n9\t18.71\n9\t34.2\n12\t49.02\n14\t22.83'
+    },{
+        'unit': 'femaleShifmanMap',
+        'label' : 'Female cM - Cox',
+        'baseUnit': 'cm',
+        'hint' : '3\t48.71\n9\t18.71\n9\t34.2\n12\t49.02\n14\t22.83'
+    },{
+        'unit': 'maleShifmanMap',
+        'label' : 'Male cM - Cox',
+        'baseUnit': 'cm',
+        'hint' : '3\t48.71\n9\t18.71\n9\t34.2\n12\t49.02\n14\t22.83'
+    },{
+        'unit': 'averageG2F1Map',
+        'label' : 'Sex-Averaged cM - G2F1',
+        'baseUnit': 'cm',
+        'hint' : '3\t48.71\n9\t18.71\n9\t34.2\n12\t49.02\n14\t22.83'
+    },{
+        'unit': 'femaleG2F1Map',
+        'label' : 'Female cM - G2F1',
+        'baseUnit': 'cm',
+        'hint' : '3\t48.71\n9\t18.71\n9\t34.2\n12\t49.02\n14\t22.83'
+    },{
+        'unit': 'maleG2F1Map',
+        'label' : 'Male cM - G2F1',
+        'baseUnit': 'cm',
+        'hint' : '3\t48.71\n9\t18.71\n9\t34.2\n12\t49.02\n14\t22.83'
+    },{
+        'unit': 'mm9',
+        'label': 'NCBI Build 37 Base Pairs (bp)',
+        'baseUnit': 'bp',
+        'hint' : '2 55900213\n4 32981000\n7 12385590\n12 10982100'
+    },{
+        'unit': 'mm10',
+        'label' : 'GRCm38 Base Pairs (bp)',
+        'baseUnit': 'bp',
+        'hint' : '2\t55900213\n4\t32981000\n7\t12385590\n12\t10982100'
+    },{
+        'unit': 'snps',
+        'label' : 'SNP',
+        'hint' : 'rs234853894\nrs253761279\nrs32356685\nrs254234459'
+    },{
+        'unit': 'genes',
+        'label' : 'Ensembl Gene ID',
+        'hint' : 'ENSMUSG00000032757\nENSMUSG00000041550\nENSMUSG00000073295\nENSMUSG00000045545'
+    }
+]

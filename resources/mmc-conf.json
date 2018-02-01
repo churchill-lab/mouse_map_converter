@@ -1,0 +1,35 @@
+{
+    "genomeFeatureIDFromUnit" : "mm10",
+
+    "conversionFiles": [
+        {"fromUnits": "mm9", "toUnits": "maleShifmanMap", "resourcePath": "genome-position-tables/mm9-to-shifman_male.txt"},
+        {"fromUnits": "mm9", "toUnits": "femaleShifmanMap", "resourcePath": "genome-position-tables/mm9-to-shifman_female.txt"},
+        {"fromUnits": "mm9", "toUnits": "averageShifmanMap", "resourcePath": "genome-position-tables/mm9-to-shifman_avg.txt"},
+        
+        {"fromUnits": "mm10", "toUnits": "maleShifmanMap", "resourcePath": "genome-position-tables/mm10-to-shifman_male.txt"},
+        {"fromUnits": "mm10", "toUnits": "femaleShifmanMap", "resourcePath": "genome-position-tables/mm10-to-shifman_female.txt"},
+        {"fromUnits": "mm10", "toUnits": "averageShifmanMap", "resourcePath": "genome-position-tables/mm10-to-shifman_avg.txt"},
+        
+        {"fromUnits": "mm9", "toUnits": "maleG2F1Map", "resourcePath": "genome-position-tables/mm9-to-G2F1_male.txt"},
+        {"fromUnits": "mm9", "toUnits": "femaleG2F1Map", "resourcePath": "genome-position-tables/mm9-to-G2F1_female.txt"},
+        {"fromUnits": "mm9", "toUnits": "averageG2F1Map", "resourcePath": "genome-position-tables/mm9-to-G2F1_avg.txt"},
+        
+        {"fromUnits": "mm10", "toUnits": "maleG2F1Map", "resourcePath": "genome-position-tables/mm10-to-G2F1_male.txt"},
+        {"fromUnits": "mm10", "toUnits": "femaleG2F1Map", "resourcePath": "genome-position-tables/mm10-to-G2F1_female.txt"},
+        {"fromUnits": "mm10", "toUnits": "averageG2F1Map", "resourcePath": "genome-position-tables/mm10-to-G2F1_avg.txt"}
+    ],
+    
+    "indirectConversions" : [
+        {
+            "connectingUnit": "mm9",
+            "connectedUnits": [
+                "maleShifmanMap",
+                "femaleShifmanMap",
+                "averageShifmanMap",
+                "maleG2F1Map",
+                "femaleG2F1Map",
+                "averageG2F1Map"
+            ]
+        }
+    ]
+}

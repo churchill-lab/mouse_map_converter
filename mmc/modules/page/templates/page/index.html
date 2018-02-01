@@ -1,0 +1,722 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ config.MAIN_TITLE|safe }}{% endblock %}
+{% block meta_description %}{% endblock %}
+{% block head %}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/style.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/simple-line-icons-2.4.1.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/dynatables-0.3.1/jquery.dynatable.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/bootstrap-switch-3.3.4/css/bootstrap3/bootstrap-switch.min.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/bootstrap-hardskilled-extend-select-1.1.4/css/select.min.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="//use.fontawesome.com/releases/v5.0.2/css/all.css">
+
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/css/fileinput.min.css"/>
+
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.33.0/codemirror.css"/>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles/main.css', _external=True) }}">
+
+    <style>
+
+    .CodeMirror {border: 1px solid #ddd;
+    font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+<body>
+<div class="inner">
+
+{% include 'page/nav.html' %}
+
+
+<!--
+<div class="p-1 d-block bg-success">visible from  (1px) to xl ∞</div>
+<div class="p-1 d-none d-sm-block bg-success">visible from sm (576px) to xl ∞</div>
+<div class="p-1 d-none d-md-block bg-success">visible from md (768px) to xl ∞</div>
+<div class="p-1 d-none d-lg-block bg-success">visible from lg (992px) to xl ∞</div>
+<div class="p-1 d-none d-xl-block bg-success">visible from xl (1200px) to ∞</div>
+<div class="p-1 d-sm-none bg-danger">NOT visible from sm (576px) to xl ∞</div>
+<div class="p-1 d-md-none bg-danger">NOT visible from md (768px) to xl ∞</div>
+<div class="p-1 d-lg-none bg-danger">NOT visible from lg (992px) to xl ∞</div>
+<div class="p-1 d-xl-none bg-danger">NOT visible from xl (1200px) to ∞</div>
+//-->
+    <div class="container-fluid">
+        <main class="col-12" role="main">
+
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-4">Mouse Map Converter</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <p class="lead">
+                        This application uses the mouse maps generated for Cox et. al. "A New Standard Genetic Map for the Laboratory Mouse" and Liu et.al. "Starting at the ends: high-resolution sex-specific linkage maps of the mouse indicate that recombination in male germline is anchored at telomeres" to convert between Centimorgans, Base Pairs, Gene Positions and SNP ID's. A linear interpolation is used (as described in the paper) to convert between Base Pairs and Centimorgans when an exact match is not found in the map.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <p class="font-weight-bold">
+                        For batch input you can load the input data from a file or enter it directly into the text area below.
+                    </p>
+                </div>
+            </div>
+
+
+
+            <div id="divProgress" class="row row-spacer"></div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card-deck">
+                        <div class="card">
+                            <div class="card-header">
+                                Convert From
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <select name="convert-from" id="convert-from" data-btn-class="btn-primary btn-block btn-sm">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row row-spacer"></div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        Example: <samp id="exampleFrom"></samp>
+                                    </div>
+                                    <div class="col-4">
+                                        <a href="#" class="float-right" id="btnLoadSample">Load Sample Data</a>
+                                    </div>
+                                </div>
+
+                                <div class="row row-spacer"></div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <textarea id="textarea-from" name="textarea-from"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row row-spacer"></div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <input id="input-id" type="file">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" id="btnConvert" class="btn btn-primary float-right">Convert <i class="fas fa-exchange-alt"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                Convert To
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col" id="convToSelectDiv">
+                                    </div>
+                                </div>
+
+                                <div class="row row-spacer"></div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="float-right">
+                                            Include Input
+                                            <input id="includeInput" name="includeInput" type="checkbox" data-size="mini" data-on-color="info">
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row row-spacer"></div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <form id="dlForm" name="dlForm" method="post" action="{{ url_for('api.api_filesave', _external=True) }}">
+                                            <textarea id="textarea-to" name="textarea-to"></textarea>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="row row-spacer"></div>
+
+                                <div class="row">
+                                    <div class="col" id="conversionStatus">
+                                    </div>
+                                    <div class="col" id="conversionErrors">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" id="btnDownload" class="btn btn-primary float-right">Download <i class="fas fa-download"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% include 'page/contact.html' %}
+
+        </main>
+    </div>
+
+
+
+
+</div>
+
+    <!-- Main Footer
+    <nav class="navbar fixed-bottom navbar-dark bg-dark">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <span class="text-muted">
+                <strong>Created by <a href="http://churchill-lab.jax.org">The Churchill Lab</a>.</strong>
+            </span>
+          </li>
+        </ul>
+    </nav>
+    //-->
+
+</body>
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+            integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+            crossorigin="anonymous"></script>
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+            crossorigin="anonymous"></script>
+
+    <!-- ENSIMPL API -->
+    <script src="//churchill-lab.jax.org/ensimpl/api/js/ensimpl.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.33.0/codemirror.js"></script>
+
+    <!-- D3 //-->
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/d3-queue.v3.min.js"></script>
+    <script src="//d3js.org/d3-request.v1.min.js"></script>
+
+    <!-- Extra //-->
+    <script src="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/dynatables-0.3.1/jquery.dynatable.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-hardskilled-extend-select-1.1.4/js/select.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-switch-3.3.4/js/bootstrap-switch.min.js') }}"></script>
+
+
+    <script>
+
+    var globals = {};
+
+    /**
+     * Download data.
+     * @param {string} URL - the URL to download data
+     * @param {string} description - descriptive text
+     * @param {function} callback - the callback function
+     */
+    function downloadData(URL, description, callback) {
+        /*
+         From d3.js documentation:
+
+         When a task completes, it must call the provided callback.
+
+         The first argument to the callback should be null if the task is successful,
+         or the error if the task failed.
+
+         The optional second argument to the callback is the return value of the task.
+         (To return multiple values from a single callback, wrap the results in an object or array.)
+         */
+        console.log('Downloading: ', URL);
+
+        $.ajax({
+            url: URL,
+            method: 'GET'
+        }).done(function(data, textStatus, jqXHR) {
+            console.log('Download of ' + description + ':', data);
+            callback(null, data);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            //displayError('Server Error', 'Unable to download ' + description);
+            console.error(description, textStatus);
+            callback(errorThrown, null);
+        });
+    }
+
+    /**
+     * Simple compare function.
+     * @param {object} a - first object
+     * @param {number} a.x - first number
+     * @param {object} b - second object
+     * @param {number} b.x - second number
+     * @return {number} 0 if equal, 1 if a.x > b.x, -1 if a.x < b.x
+     */
+    function compareX(a, b) {
+        if (a.x  < b.x)
+            return -1;
+        if (a.x > b.x)
+            return 1;
+        return 0;
+    }
+
+
+    /**
+     * Format Mbp to two decimal places.
+     * @param {number} Mbp - the number to round
+     * @return {string} Mbp formatted to two decimal places
+     */
+    function formatMbp(Mbp) {
+        return Number(Mbp).toFixed(2);
+    }
+
+    // Extended disable function
+    jQuery.fn.extend({
+        disable: function(state) {
+            return this.each(function() {
+                let $this = $(this);
+                if($this.is('input, button, textarea, select'))
+                    this.disabled = state;
+                else
+                    $this.toggleClass('disabled', state);
+            });
+        }
+    });
+
+ function formatCM(n) {
+        try {
+            let nStr = n.toString();
+            let nFixedStr = n.toFixed(3);
+
+            if(nStr.length <= nFixedStr.length && /^[0-9\.]+$/.test(nStr)) {
+                return nStr;
+            } else {
+                return nFixedStr;
+            }
+        } catch(err) {
+            return '' + n;
+        }
+    }
+    function formatBP(n) {
+        try {
+            return n.toFixed(0);
+        } catch(err) {
+            return '' + n;
+        }
+    }
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function setupSelectBoxes(unitData) {
+        globals.units = {};
+
+        let firstElem = null;
+
+        $.each(unitData['display'], function(idx, elem) {
+            if (firstElem === null) {
+                firstElem = elem;
+            }
+            $('#convert-from').append($('<option>', {value: elem['unit'], text: elem['label']}));
+            globals.units[elem['unit']] = elem;
+        });
+
+        $('#convToSelectDiv').html(`<select name="convert-to" id="convert-to" data-btn-class="btn-primary btn-block btn-sm"></select>`);
+        let to1 = unitData['conversion'][firstElem['unit']];
+        $.each(unitData['display'], function(idx, elem) {
+            $.each(to1, function(idxTo, elemTo) {
+                if (elem['unit'] === elemTo) {
+                    $('#convert-to').append($('<option>', {
+                        value: elem['unit'],
+                        text: elem['label']
+                    }));
+                }
+            });
+        });
+
+        $('#exampleFrom').html(firstElem['hint'].split('\n')[0]);
+
+
+        $('#convert-from').extendSelect();
+        globals.convTo = null;
+        globals.convTo = $('#convert-to').extendSelect();
+
+        $('#convert-from').on('change', function () {
+            const selected = $(this).find(':selected').val();
+            console.log('selected = ', selected);
+
+            $('#exampleFrom').html(globals.units[selected]['hint'].split('\n')[0]);
+            $('#convToSelectDiv').html('');
+            $('#convToSelectDiv').html(`<select name="convert-to" id="convert-to" data-btn-class="btn-primary btn-block btn-sm"></select>`);
+
+            console.log('unitData=', unitData);
+            // loop through the acceptable values and add to selectbox
+            let to2 = unitData['conversion'][selected];
+
+            $.each(unitData['display'], function(idx, elem) {
+                $.each(to2, function(idxTo2, elemTo2) {
+                    if (elem['unit'] === elemTo2) {
+                        $('#convert-to').append($('<option>', {
+                            value: elem['unit'],
+                            text: elem['label']
+                        }));
+                    }
+                });
+
+            });
+
+            $('#convert-to').extendSelect();
+
+        });
+    }
+
+
+    function downloadConversionUnits(callback) {
+        let unitURL = '{{ url_for('api.api_units', _external=True) }}';
+        downloadData(unitURL, 'conversionUnits', callback);
+    }
+
+    function setStatus(done) {
+
+        //$('#textarea-from').disable(!done);
+        //$('#convert-from').disable(!done);
+
+        $('#textarea-to').disable(!done);
+        $('#convert-to').disable(!done);
+
+        $('#input-id').parent().disable(!done);
+        $('#btnConvert').disable(!done);
+        $('#btnDownload').disable(!done);
+
+        $('.select-extended-element .btn').disable(!done);
+
+        if (done) {
+            globals.inputFrom.setOption('readOnly', false);
+            $('#btnConvert').html('Convert <i class="fas fa-exchange-alt">');
+        } else {
+            globals.inputFrom.setOption('readOnly', 'nocursor');
+            $('#btnConvert').html('Convert <i class="fa fa-cog fa-spin fa-fw"></i>');
+            $('#conversionStatus').html('Performing conversion...');
+            $('#conversionErrors').html('');
+        }
+    }
+
+    function formatResults() {
+        let fromUnit = $('#convert-from').val();
+        let toUnit = $('#convert-to').val();
+        let vals = [];
+        let unit = globals.units[toUnit];
+        let len = globals.results['results'].length;
+        let includeInput = $('#includeInput').bootstrapSwitch('state');
+
+        console.log('formatResults');
+
+        let numSuccess = 0;
+        let numErrors = 0;
+
+        $.each(globals.results['results'], function(idx, val) {
+            console.log(idx, val);
+            let temp_val = val;
+
+            if (fromUnit === 'snps') {
+                // val = [snp, chrom, output_value]
+                if (!includeInput) {
+                    temp_val = [val[1], val[2]];
+                }
+
+                if (val[2] != null) {
+                    if (unit.baseUnit === 'cm') {
+                        temp_val[temp_val.length - 1] = formatCM(+temp_val[temp_val.length - 1]);
+                    } else if (unit.baseUnit === 'bp') {
+                        temp_val[temp_val.length - 1] = formatBP(+temp_val[temp_val.length - 1]);
+                    }
+
+                    let formattedVal = temp_val.join('\t');
+                    vals.push(formattedVal);
+                    numSuccess++;
+                } else {
+                    numErrors++;
+                    if (includeInput) {
+                        let formattedVal = temp_val.join('\t');
+                        vals.push(formattedVal);
+                    }
+                }
+
+            } else if (fromUnit === 'genes') {
+
+                // val = [gene_id, chrom, output_value_1, output_value_2]
+                if (!includeInput) {
+                    temp_val = [val[1], val[2], val[3]];
+                }
+
+                if (val[2] != null) {
+                    if (unit.baseUnit === 'cm') {
+                        temp_val[temp_val.length - 2] = formatCM(+temp_val[temp_val.length - 2]);
+                    } else if (unit.baseUnit === 'bp') {
+                        temp_val[temp_val.length - 2] = formatBP(+temp_val[temp_val.length - 2]);
+                    }
+
+                    let formattedVal = temp_val.join('\t');
+                    vals.push(formattedVal);
+                    numSuccess++;
+                } else if (val[3] != null) {
+                    if (unit.baseUnit === 'cm') {
+                        temp_val[temp_val.length - 1] = formatCM(+temp_val[temp_val.length - 1]);
+                    } else if (unit.baseUnit === 'bp') {
+                        temp_val[temp_val.length - 1] = formatBP(+temp_val[temp_val.length - 1]);
+                    }
+
+                    let formattedVal = temp_val.join('\t');
+                    vals.push(formattedVal);
+                    numSuccess++;
+                } else {
+                    numErrors++;
+                    if (includeInput) {
+                        let formattedVal = temp_val.join('\t');
+                        vals.push(formattedVal);
+                    }
+                }
+
+
+
+            } else {
+                // val = [input_chrom, input_value_1, input_value2,
+                //        output_chrom, output_value_1, output_value2]
+
+                if (!includeInput) {
+                    temp_val = [val[3], val[4], val[5]];
+                }
+
+                if (val[4] != null) {
+                    if (unit.baseUnit === 'cm') {
+                        temp_val[temp_val.length - 2] = formatCM(+temp_val[temp_val.length - 2]);
+                    } else if (unit.baseUnit === 'bp') {
+                        temp_val[temp_val.length - 2] = formatBP(+temp_val[temp_val.length - 2]);
+                    }
+
+                    let formattedVal = temp_val.join('\t');
+                    vals.push(formattedVal);
+                    numSuccess++;
+                } else if (val[5] != null) {
+                    if (unit.baseUnit === 'cm') {
+                        temp_val[temp_val.length - 1] = formatCM(+temp_val[temp_val.length - 1]);
+                    } else if (unit.baseUnit === 'bp') {
+                        temp_val[temp_val.length - 1] = formatBP(+temp_val[temp_val.length - 1]);
+                    }
+
+                    let formattedVal = temp_val.join('\t');
+                    vals.push(formattedVal);
+                    numSuccess++;
+                } else {
+                    numErrors++;
+                    if (includeInput) {
+                        let formattedVal = temp_val.join('\t');
+                        vals.push(formattedVal);
+                    }
+                }
+            }
+        });
+
+        let values = vals.join('\n');
+
+        globals.inputTo.setValue(values);
+
+        $('#conversionErrors').html('');
+        if (globals.results['extra'] != null) {
+            if (globals.results['extra']['errors'] != null) {
+                if (globals.results['extra']['errors'].length !== 0) {
+                    let numError = globals.results['extra']['errors'].length.toLocaleString();
+                    $('#conversionErrors').html(`<a href="#" class="float-right text-danger" id="btnShowErrors"><i class="fas fa-times-circle"></i> Errors: ${numError}</a>`);
+                    $('#btnShowErrors').click(function(event) {
+                        event.preventDefault();
+                        let errors = [];
+                        $.each(globals.results['extra']['errors'], function(idx, val) {
+                            console.log('error=', val);
+                            errors.push(val.join('\t'));
+                        });
+                        globals.inputTo.setValue(errors.join('\n'));
+                    });
+                }
+            }
+        }
+
+        $('#conversionStatus').html('<a href="#" class="text-success" id="btnShowResults"><i class="fas fa-check-circle"></i> Converted: ' + (numSuccess).toLocaleString() + '</a>');
+        $('#btnShowResults').click(function(event) {
+            event.preventDefault();
+            formatResults();
+        });
+
+
+
+    }
+
+    function performConversion() {
+        setStatus(false);
+
+        try {
+            let fromUnit = $('#convert-from').val();
+            let toUnit = $('#convert-to').val();
+
+            let inputLines = globals.inputFrom.getValue().split('\n');
+            let splitLines = [];
+            for (let i = 0; i < inputLines.length; i++) {
+                splitLines.push(inputLines[i].trim().split(/\s+/));
+            }
+            inputLines = null;
+
+            let lineEmptyFlags = splitLines.map(function(splitLine) {
+                return splitLine.length === 0 || (splitLine.length === 1 && splitLine[0] === '');
+            });
+
+            let dataToConvert = [];
+            for (let i = 0; i < splitLines.length; i++) {
+                if (!lineEmptyFlags[i]) {
+                    if (fromUnit === 'genomeFeatureID') {
+                        dataToConvert.push(splitLines[i].splice(0, 1)[0]);
+                    } else {
+                        dataToConvert.push(splitLines[i].splice(0, 3));
+                    }
+                }
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ url_for('api.api_convert', _external=True) }}',
+                dataType: 'json',
+                data: JSON.stringify({
+                    'includeInput': true,
+                    'includeErrors': true,
+                    'fromUnit': fromUnit,
+                    'toUnit': toUnit,
+                    'dataToConvert': dataToConvert
+                }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    console.log('Returned Data:', data);
+                    setStatus(true);
+
+                    globals.results = data;
+
+                    formatResults();
+                    setStatus(true);
+                },
+                error: function(jqXHR) {
+                    console.log('Request failed');
+                    $('#conversionStatus').html('<span class="text-danger">Request failed</span>');
+                    setStatus(true);
+                }
+
+            });
+        } catch(e) {
+            console.log(e);
+            $('#conversionStatus').html('<span class="text-danger">Internal Error</span>');
+        }
+    }
+
+
+    $().ready(function () {
+        globals.inputFrom = CodeMirror.fromTextArea($('#textarea-from')[0], {
+            lineNumbers: true
+        });
+
+        globals.inputTo = CodeMirror.fromTextArea($('#textarea-to')[0], {
+            lineNumbers: true
+        });
+
+        d3.queue()
+            .defer(downloadConversionUnits)
+            .await(function(error, data) {
+                console.log('-------------------------------------------------');
+                console.log('data=', data);
+
+                setupSelectBoxes(data)
+            });
+
+        $('#input-id').fileinput({
+            showPreview: false,
+            showUpload: false,
+            showRemove: true,
+            msgPlaceholder: 'Select a data file to load...'
+        });
+
+        $('#input-id').on('fileselect', function(event, numFiles, label) {
+             console.log(event, numFiles, label);
+             let files = event.target.files;
+             if (files.length === 1) {
+                 let file = files[0];
+                 let reader = new FileReader();
+                 reader.onload = function(e) {
+                     globals.inputFrom.setValue(e.target.result);
+                 };
+                 reader.readAsText(file);
+             }
+        });
+
+        $('#input-id').on('fileclear', function(event) {
+            $('#textarea-from').val('');
+        });
+
+        $('#btnConvert').click(function (event) {
+           console.log(event);
+           performConversion();
+        });
+
+        $('#btnDownload').click(function(event) {
+            $('#dlForm').submit();
+        });
+
+        $('#btnLoadSample').click(function(event) {
+            event.preventDefault();
+            globals.inputFrom.setValue(globals.units[$('#convert-from').val()]['hint']);
+        });
+
+        $('#includeInput').bootstrapSwitch();
+        $('#includeInput').on('switchChange.bootstrapSwitch', function(event, state) {
+            formatResults();
+        });
+    });
+    </script>
+
+{% endblock %}

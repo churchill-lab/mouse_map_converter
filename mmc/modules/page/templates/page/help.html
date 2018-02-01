@@ -1,0 +1,165 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ config.MAIN_TITLE|safe }}{% endblock %}
+{% block meta_description %}{% endblock %}
+{% block head %}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/style.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/simple-line-icons-2.4.1.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="//use.fontawesome.com/releases/v5.0.2/css/all.css">
+
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/bootstrap-hardskilled-extend-select-1.1.4/css/select.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/css/fileinput.min.css"/>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles/main.css', _external=True) }}">
+
+    <style>
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+{% include 'page/nav.html' %}
+
+<body>
+    <div class="container-fluid">
+        <main class="col-12" role="main">
+
+            <div class="row">
+                <div class="col">
+                    <h4>Help</h4>
+                    The Convert From Form allows you to convert from a selected input type
+                    to a selected output type. The input type will either be a
+                    coordinate system (based on centimorgans or basepairs) or a
+                    genetic feature ID which allows for RS numbers or Ensembl Gene IDs.
+                    When the input type is selected an example of the correct input
+                    text formatting will be shown as above the input section.  If you have multiple
+                    values to convert you should separate each value with a newline. Also note that
+                    if your input data is already saved in a correctly formatted file on your
+                    computer you can just use the "Browse..." button.
+                    Once your data has been successfully converted you can save the
+                    results by clicking the "Download" button.
+                    <br>
+                    <br>
+                    Refer to the following formatting rules for creating input data:
+                    <ul>
+                        <li>Use spaces or tabs to separate data columns </li>
+                        <li>For SNP or Gene IDs the first column will be treated as the IDs
+                            and all subsequent columns will not be used for the
+                            conversion. </li>
+                        <li>For centimorgan and basepair values the first column will
+                            be treated as a chromosome ID, the second column will be a
+                            cM or bp value.  You can optionally use a 3rd column which
+                            will also be treated as cM or bp value. All columns after are
+                            ignored when converting data.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row row-spacer"></div>
+
+            <div class="row">
+                <div class="col">
+                    Here are some examples of correctly formatted input data:
+                </div>
+            </div>
+
+            <div class="row row-spacer"></div>
+
+            <div class="row justify-content-center">
+                <div class="col-2">
+
+                    <strong>Centimorgans</strong>
+<pre class="text-left">1 44.4
+2 3.2234
+1 77
+5 44.21 54.21
+6 21.1
+4 19.002
+1 55</pre>
+                </div>
+                <div class="col-2">
+                    <strong>Base pair</strong>
+<pre>1 92887845
+2 7821365
+1 172956646
+5 92572826
+6 47433029 47519820
+4 41364422 42273798
+1 131246731</pre>
+                </div>
+                <div class="col-2">
+                    <strong>SNP ID</strong>
+<pre>rs3675244
+rs3711314
+rs3023460
+rs3707114
+rs3706767
+</pre>
+                </div>
+            </div>
+
+
+            {% include 'page/contact.html' %}
+
+        </main>
+    </div>
+
+</body>
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+            integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+            crossorigin="anonymous"></script>
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+            crossorigin="anonymous"></script>
+
+    <!-- ENSIMPL API -->
+    <script src="//churchill-lab.jax.org/ensimpl/api/js/ensimpl.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+
+
+    <!-- D3 //-->
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/d3-queue.v3.min.js"></script>
+    <script src="//d3js.org/d3-request.v1.min.js"></script>
+
+    <!-- Extra //-->
+    <script src="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/dynatables-0.3.1/jquery.dynatable.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-hardskilled-extend-select-1.1.4/js/select.min.js') }}"></script>
+
+    <script>
+
+    $().ready(function () {
+
+    });
+
+
+
+
+    </script>
+
+{% endblock %}

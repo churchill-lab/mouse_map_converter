@@ -1,0 +1,4 @@
+.git
+.dockerignore
+#viewer.settings
+cache.sqlite

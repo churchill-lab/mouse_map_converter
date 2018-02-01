@@ -1,0 +1,133 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ config.MAIN_TITLE|safe }}{% endblock %}
+{% block meta_description %}{% endblock %}
+{% block head %}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/style.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/simple-line-icons-2.4.1.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="//use.fontawesome.com/releases/v5.0.2/css/all.css">
+
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/bootstrap-hardskilled-extend-select-1.1.4/css/select.css', _external=True) }}">
+
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/css/fileinput.min.css"/>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles/main.css', _external=True) }}">
+
+    <style>
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+<body>
+
+    {% include 'page/nav.html' %}
+
+    <div class="container-fluid">
+        <main class="col-12" role="main">
+
+            <div class="row">
+                <div class="col">
+                    <h4>Data Resource</h4>
+                    <ul class="list-unstyled pl-4">
+                        <li>
+                            <a href="Revised_HSmap_SNPs.csv">Mouse Map Data (Base Pair to centimorgan mapping)</a><sup>1</sup> <span class="font-weight-light">[comma-delimited]</span>
+                        </li>
+                        <li>
+                            <a href="MIT-marker-data.xlsx">Detailed Mapping Data for MIT Markers</a><sup>1</sup> [Excel Spreadsheet]
+                        </li>
+                        <li>
+                            <a href="multiply-mapped-MIT-markers.xls">Supplemental Data on Multiply Mapped MIT Markers</a><sup>1</sup> [Excel Spreadsheet]
+                        </li>
+                        <li>
+                            <a href="unmapped-MIT-markers.xlsx">Supplemental Data on Unmapped MIT Markers</a><sup>1</sup> [Excel Spreadsheet]
+                        </li>
+                        <li>
+                            <a href="TotallyRaw.tgz">Raw Genotype Data Used to Build Maps</a><sup>1, 2</sup> [tgz compressed files]
+                        </li>
+                        <li>
+                            <a href="all_but_the_raw_data.tgz">Cleaned Data Used to Build Maps</a><sup>1</sup> [tgz compressed files]
+                        </li>
+                        <li>
+                            <a href="G2F1.anchor.maps.zip">Mapping Data for G2F1 Based Coordinates</a><sup>3</sup> [zip compressed files]
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <h4>References</h4>
+                    <ol>
+                        <li>
+                            Cox A, Ackert-Bicknell C, Dumont BL, Ding Y, Tzenova Bell J, Brockmann GA, Wergedal JE, Bult C, Paigen B, Flint J, Tsaih SW, Churchill GA, Broman KW.<br/>
+                            A New Standard Genetic Map for the Mouse<br/>
+                            Genetics. 2009 Aug;182(4):1335-44. PMCID: PMC2728870<br/>
+                        </li>
+                        <li>
+                            Shifman, S., J. T. Bell, R. R. Copley, M. S. Taylor, R. W. Williams et al.,
+                            2006 A high-resolution single nucleotide polymorphism genetic map of the mouse genome.
+                            PLoS Biol 4: e395.
+                        </li>
+                        <li>
+                            Liu, E.Y., Morgan A.P., Chesler E.J., Wang W., Churchill G.A., Pardo-Manuel de Villena F.<br/>
+                            Starting at the ends: high-resolution sex-specific linkage maps of the mouse indicate that recombination in male germline is anchored at telomeres<br/>
+                            Genetics, 2104, (in press)<br/>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+
+            {% include 'page/contact.html' %}
+
+        </main>
+    </div>
+
+</body>
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+            integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+            crossorigin="anonymous"></script>
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+            crossorigin="anonymous"></script>
+
+    <!-- ENSIMPL API -->
+    <script src="//churchill-lab.jax.org/ensimpl/api/js/ensimpl.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.5/js/fileinput.min.js"></script>
+
+
+    <!-- D3 //-->
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/d3-queue.v3.min.js"></script>
+    <script src="//d3js.org/d3-request.v1.min.js"></script>
+
+    <!-- Extra //-->
+    <script src="{{ url_for('static', filename='vendor/CoreUI-v1.0.6/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/dynatables-0.3.1/jquery.dynatable.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-hardskilled-extend-select-1.1.4/js/select.min.js') }}"></script>
+
+{% endblock %}
