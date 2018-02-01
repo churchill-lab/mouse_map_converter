@@ -5,7 +5,7 @@ LABEL maintainer="Matthew Vincent <mattjvincent@gmail.com>" \
 RUN apt-get update && \
     apt-get -y install gcc
 
-ENV INSTALL_PATH /app/mmc
+ENV INSTALL_PATH /app/mouse_map_converter
 RUN mkdir -p $INSTALL_PATH
 
 WORKDIR $INSTALL_PATH

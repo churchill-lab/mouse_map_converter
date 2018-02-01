@@ -4,7 +4,7 @@ set -ex
 # docker hub username
 USERNAME=mattjvincent
 # image name
-IMAGE=qtlweb
+IMAGE=mouse_map_converter
 
 version=`cat VERSION`
 echo "version: $version"

@@ -18,10 +18,8 @@ import json
 from werkzeug.datastructures import Headers
 from flask import current_app
 from mmc.api.converter import MouseMapFactory
-from mmc.api.converter import MouseMapFactory
 from mmc.api.genome_feature import get_genes
 from mmc.api.genome_feature import get_snps
-from werkzeug.exceptions import BadRequest
 from collections import OrderedDict
 
 from mmc import utils
@@ -96,7 +94,6 @@ def api_units():
 
     units = {}
     for curr_from_unit, entry in sorted(conversion_maps.items()):
-        print(curr_from_unit, list(sorted(entry.keys())))
         units[curr_from_unit] = list(sorted(entry.keys()))
 
     # genes and snps
@@ -153,8 +150,6 @@ def api_convert():
     if from_unit == 'snps':
         from_unit = mmf.config['genomeFeatureIDFromUnit']
 
-        print('from_unit now = ', from_unit)
-
         # make a map of al the snps
         ordered_data = OrderedDict()
         for d in data:
@@ -210,15 +205,12 @@ def api_convert():
     elif from_unit == 'genes':
         from_unit = mmf.config['genomeFeatureIDFromUnit']
 
-        print('from_unit now = ', from_unit)
-
         # make a map of al the genes
         ordered_data = OrderedDict()
         for d in data:
             ordered_data[d[0]] = 1
 
         genes = get_genes(data, 91, 'Mm')
-        print(genes)
 
         if from_unit == to_unit:
             # special case of just getting the locations and returning

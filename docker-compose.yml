@@ -5,12 +5,11 @@ services:
   website:
     build: .
     command: >
-      gunicorn -c "python:config.gunicorn" --reload "mmc.app:create_app()"
+      gunicorn -w ${GUNICORN_WORKERS} -b 0.0.0.0:9000 --reload "mmc.app:create_app()"
     env_file:
       - '.env'
     volumes:
       - '.:/app/mmc'
     ports:
-      - '9000:9000'
-
+      - '${EXTERNAL_PORT}:9000'
 
