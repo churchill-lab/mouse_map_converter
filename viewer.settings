@@ -11,7 +11,7 @@ CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 
 
-MMC_CONFIG = '/app/mmc/resources/mmc-conf.json'
+MMC_CONFIG = '/app/mouse_map_converter/resources/mmc-conf.json'
 
 
 LOG_LEVEL = 'DEBUG' # CRITICAL / ERROR / WARNING / INFO / DEBUG
