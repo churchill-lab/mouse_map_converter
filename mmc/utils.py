@@ -2,6 +2,7 @@
 """Useful generic utilities for the package.
 """
 from collections import OrderedDict
+
 import bz2
 import gzip
 import logging
@@ -11,7 +12,7 @@ import string
 
 from urllib.request import urlopen
 
-logging.basicConfig(format='[ENsimpl] [%(asctime)s] %(message)s',
+logging.basicConfig(format='[mouse_map_converter] [%(asctime)s] %(message)s',
                     datefmt='%m/%d/%Y %I:%M:%S %p')
 
 

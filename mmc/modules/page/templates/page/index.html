@@ -457,7 +457,6 @@
         let numErrors = 0;
 
         $.each(globals.results['results'], function(idx, val) {
-            console.log(idx, val);
             let temp_val = val;
 
             if (fromUnit === 'snps') {
@@ -491,20 +490,12 @@
                     temp_val = [val[1], val[2], val[3]];
                 }
 
-                if (val[2] != null) {
+                if ((temp_val[1] != null) && (temp_val[2] != null)) {
                     if (unit.baseUnit === 'cm') {
                         temp_val[temp_val.length - 2] = formatCM(+temp_val[temp_val.length - 2]);
-                    } else if (unit.baseUnit === 'bp') {
-                        temp_val[temp_val.length - 2] = formatBP(+temp_val[temp_val.length - 2]);
-                    }
-
-                    let formattedVal = temp_val.join('\t');
-                    vals.push(formattedVal);
-                    numSuccess++;
-                } else if (val[3] != null) {
-                    if (unit.baseUnit === 'cm') {
                         temp_val[temp_val.length - 1] = formatCM(+temp_val[temp_val.length - 1]);
                     } else if (unit.baseUnit === 'bp') {
+                        temp_val[temp_val.length - 2] = formatBP(+temp_val[temp_val.length - 2]);
                         temp_val[temp_val.length - 1] = formatBP(+temp_val[temp_val.length - 1]);
                     }
 
@@ -518,9 +509,6 @@
                         vals.push(formattedVal);
                     }
                 }
-
-
-
             } else {
                 // val = [input_chrom, input_value_1, input_value2,
                 //        output_chrom, output_value_1, output_value2]
@@ -634,7 +622,6 @@
                 }),
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
-                    console.log('Returned Data:', data);
                     setStatus(true);
 
                     globals.results = data;

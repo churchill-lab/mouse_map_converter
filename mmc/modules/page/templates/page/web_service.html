@@ -197,24 +197,50 @@
 
             <div class="row">
                 <div class="col">
-                    <h5>Python</h5>
-                    Here is an example script written in python that shows how you
-                    can use this service to convert coordinates and check for
-                    error message in the result:
+                    <h5>Python Example 1</h5>
+                    Here is an example script written in Python that shows how you
+                    can use this service to convert Ensembl Gene IDs:
 
-                    <script src="https://gist.github.com/keithshep/6643021.js"></script>
+                    <script src="https://gist.github.com/mattjvincent/ec24d9e4a775405fdd4e582e886d0a2f.js"></script>
                 </div>
             </div>
-
 
             <div class="row row-spacer"></div>
 
             <div class="row">
                 <div class="col">
-                    <h5>curl</h5>
+                    <h5>Python Example 2</h5>
+                    Here is an example script written in Python that shows how you
+                    can use this service to convert SNP IDs:
+
+                    <script src="https://gist.github.com/mattjvincent/975c96c76b73974d8eb52106b7375216.js"></script>
+                </div>
+            </div>
+
+            <div class="row row-spacer"></div>
+
+            <div class="row">
+                <div class="col">
+                    <h5>Python Example 3</h5>
+                    Here is an example script written in Python that shows how you
+                    can use this service to convert mm10 based coordinates:
+
+                    <script src="https://gist.github.com/mattjvincent/35d24f1473134653e91b27e661ff7202.js"></script>
+                </div>
+            </div>
+
+            <div class="row row-spacer"></div>
+
+            <div class="row">
+                <div class="col">
+                    <h5>curl Example</h5>
                     Here is an example curl command that shows how you
                     can use this service:
-                    <script src="https://gist.github.com/keithshep/6643021.js"></script>
+                    <div class="row row-spacer"></div>
+                    <code>
+                    curl -X POST -H "Content-Type: application/json"
+                         -d '{"fromUnit":"mm10", "toUnit":"maleG2F1Map", "dataToConvert":[['1', 12000000, 12500000]]}'
+                    </code>
                 </div>
             </div>
 
