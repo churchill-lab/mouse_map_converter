@@ -44,11 +44,13 @@
                     <h4>Data Resource</h4>
                     <ul class="list-unstyled pl-4">
                         <li>
-                            <a href="Revised_HSmap_SNPs.csv">Mouse Map Data (Base Pair to centimorgan mapping)</a><sup>1</sup> <span class="font-weight-light">[comma-delimited]</span>
+                            <a href="{{ url_for('static', filename='resources/Revised_HSmap_SNPs.csv', _external=True) }}">Mouse Map Data (Base Pair to centimorgan mapping)</a><sup>1</sup> <span class="font-weight-light">[comma-delimited]</span>
                         </li>
                         <li>
-                            <a href="MIT-marker-data.xlsx">Detailed Mapping Data for MIT Markers</a><sup>1</sup> [Excel Spreadsheet]
+                            <a href="{{ url_for('static', filename='resources/MIT-marker-data.xlsx', _external=True) }}">Detailed Mapping Data for MIT Markers</a><sup>1</sup> [Excel Spreadsheet]
                         </li>
+                        <!--
+
                         <li>
                             <a href="multiply-mapped-MIT-markers.xls">Supplemental Data on Multiply Mapped MIT Markers</a><sup>1</sup> [Excel Spreadsheet]
                         </li>
@@ -61,8 +63,10 @@
                         <li>
                             <a href="all_but_the_raw_data.tgz">Cleaned Data Used to Build Maps</a><sup>1</sup> [tgz compressed files]
                         </li>
+
+                        //-->
                         <li>
-                            <a href="G2F1.anchor.maps.zip">Mapping Data for G2F1 Based Coordinates</a><sup>3</sup> [zip compressed files]
+                            <a href="{{ url_for('static', filename='resources/G2F1.anchor.maps.zip', _external=True) }}">Mapping Data for G2F1 Based Coordinates</a><sup>3</sup> [zip compressed files]
                         </li>
                     </ul>
                 </div>
